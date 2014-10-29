@@ -124,11 +124,11 @@
     solve problems with GA than with standard traditional methods.}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
   \frametitle{Geometric algebra (GA)}
@@ -147,20 +147,15 @@
    \item GA in more dimensions
    \item Transformations with GA
    \item Keplerian orbits
-   \item Complex analysis
-   \item Green's functions
+   \item Geometric calculus
    \item Dirac equation
-   \item E\&M \pause
-   \item Linear Algebra
-   \item Relativistic kinematics
-   \item Differential forms
-   \item Twistors
-   \item GR
+   \item E\&M
+   \item Riemann tensor for Kerr
   \end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % \part{Introduction}
 % \frame{\partpage}
@@ -228,9 +223,9 @@
   \end{equation*}
 
   \note{We want some way to manipulate these expressions further. One
-    thing that would be really nice is if we had inverses. But the only
-    thing around with any inverses is our field, $\mathbb{R}$, so we
-    need to simplify some of our expressions into scalars. In
+    thing that would be really nice is if we had inverses. But the
+    only thing around with any inverses is our field, $\mathbb{R}$, so
+    we need to simplify some of our expressions into scalars. In
     particular, it makes sense to impose $\vec{v}\, \vec{v} = \vec{v}
     \cdot \vec{v} \in \mathbb{R}$.
 
@@ -301,9 +296,9 @@
     \only<4->{&= \vec{v} \cdot \vec{w} + \vec{v} \wedge \vec{w}}
   \end{align*}
 
-  \note{Product of two vectors is a spinor. You get one term that's the
-    dot product between the vectors, and one that's the area of the
-    parallelogram.}
+  \note{Product of two vectors is a spinor. You get one term that's
+    the dot product between the vectors, and one that's the area of
+    the parallelogram.}
 \end{frame}
 
 \begin{frame}
@@ -413,8 +408,8 @@
   \end{equation*}
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
   \frametitle{Reflection}
@@ -507,21 +502,23 @@
     $z$ axis directly onto the symmetry axis, and ignored everything
     else. The problem with this is that ``everything else'' is the
     phase of the gravitational wave, which you may know is a very
-    important quantity. In their system, the phase was terrible: it had
-    discontinuities; it could reverse direction; it was just awful. The
-    problem was that they were only keeping track of that one vector;
-    they had their eyes on one thing that was being transformed, and
-    that's not enough to tell you what's going on around that
-    vector. So Rob Owen, Harald Pfeiffer, and I pointed out that you
-    need to keep track of the thing that's doing the transformation.}
+    important quantity. In their system, the phase was terrible: it
+    had discontinuities; it could reverse direction; it was just
+    awful. The problem was that they were only keeping track of that
+    one vector; they had their eyes on one thing that was being
+    transformed, and that's not enough to tell you what's going on
+    around that vector. So Rob Owen, Harald Pfeiffer, and I pointed
+    out that you need to keep track of the thing that's doing the
+    transformation.}
 
-  \note{We deal with equations describing the change in things that get
-    transformed. So the question is: do we deal with the thing itself
-    that gets transformed, or the thing doing the transforming?  And I
-    think a pretty good rule of thumb for answering this question is:
-    If there's only one thing that can get transformed, then by all
-    means just look at that; if there are more, then you would probably
-    benefit from looking at the thing doing the transforming.}
+  \note{We deal with equations describing the change in things that
+    get transformed. So the question is: do we deal with the thing
+    itself that gets transformed, or the thing doing the transforming?
+    And I think a pretty good rule of thumb for answering this
+    question is: If there's only one thing that can get transformed,
+    then by all means just look at that; if there are more, then you
+    would probably benefit from looking at the thing doing the
+    transforming.}
 \end{frame}
 
 \begin{frame}
@@ -717,7 +714,7 @@
   \begin{equation*}
     \mathcal{R}(B) = - \frac{M} {(r-i\, \vec{a} \cdot
       \hat{\vec{r}})^{3}}\, \frac{B - 3\, \vec{r}\, \vec{t}\, B\,
-      \vec{t}\, \vec{r}} {2}
+      (\vec{r}\, \vec{t})^{-1}} {2}
   \end{equation*}
 \end{frame}
 
