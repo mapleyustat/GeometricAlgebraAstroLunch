@@ -1,0 +1,855 @@
+%% NOTE: This file is just included from PresentationWithNotes.tex or
+%% from PresentationSlides.tex.
+\documentclass[12pt,xcolor={dvipsnames}]{beamer}
+
+\input{Externals/UsePackages} %
+% \pagecolor{white}\usepackage{pdfpages} % For including other PDFs
+\input{Externals/Macros} %
+\input{Externals/Cornell} %
+%\usepackage{multimedia} %
+%\usepackage[setpagesize=false]{hyperref} %
+%\usepackage{pgfpages} %
+\usepackage[overlay]{textpos} %
+\input{Clifford}
+
+\setlength{\TPHorizModule}{1cm}
+\setlength{\TPVertModule}{1cm}
+
+\renewcommand{\vec}{\bm}
+
+\setbeamercolor{normal text}{fg=CornellDarkGray,%
+  bg=CornellLightestGray}
+\titlegraphic{\includegraphics[width=75pt, height=75pt]%
+  {Externals/CULogoFineGray}}
+
+
+%% For tikz/pgf plots
+\usepackage{tikz} %
+% \usepackage{tikzscale} %
+\usepackage{pgfplots} %
+\usepackage{pgfplotstable} %
+\pgfplotsset{width=330pt} %
+\pgfplotsset{compat=1.7} %
+\usetikzlibrary{pgfplots.groupplots} %
+%\usetikzlibrary{decorations.shapes} %
+%\usetikzlibrary{decorations.markings} %
+%\usetikzlibrary{decorations.pathreplacing, calc} %
+\pgfplotsset{axis line style={line width=1pt, black}} %
+\pgfplotsset{tick style={line width=1pt, black}} %
+\pgfplotsset{minor tick style={black}} %
+\newcommand{\PlotData}{
+  \addplot[color=Red, densely dotted, very thick]
+  table[x index=0, y index=1] {\loadedtable};
+  \addplot[color=Blue, dotted, very thick]
+  table[x index=0, y index=2] {\loadedtable};
+  \addplot[smooth, color=Green, very thick]
+  table[x index=0, y index=3] {\loadedtable};
+  \addplot[color=Blue]
+  table[x index=0, y index=4] {\loadedtable};
+  \addplot[color=Red]
+  table[x index=0, y index=5] {\loadedtable};
+}
+%% Automatically write figures as PDFs for import next time
+\usetikzlibrary{external}
+\tikzexternalize
+\tikzsetfigurename{Presentation_} %
+%\tikzset{external/force remake} % To force reprocessing of plots
+
+
+\renewcommand{\vector}[1]{\bm{#1}}
+\newcommand{\vectordot}[1]{\bm{{\dot{#1}}}}
+\newcommand{\unitvec}[1]{\vector{{\hat{#1}}}}
+\newcommand{\unitvecdot}[1]{\vector{{\dot{\hat{#1}}}}}
+
+\newcommand{\quat}[1]{\ensuremath{\mathbf{\MakeUppercase{#1}}}}
+\newcommand{\quatcomponent}[2]{\ensuremath{\MakeLowercase{#1}_{#2}}}
+\newcommand{\quatcomponentco}[2]%
+        {\ensuremath{\co{\MakeLowercase{#1}}_{#2}}}
+\newcommand{\quatpart}[2]{\ensuremath{\MakeUppercase{#1}_{#2}}}
+\newcommand{\quatpartco}[2]{\ensuremath{\co{\MakeUppercase{#1}}_{#2}}}
+\newcommand{\quatabs}[1]{\ensuremath{\abs{\quat{#1}}}}
+\newcommand{\quatvec}[1]{\ensuremath{\vector{\lowercase{#1}}}}
+\newcommand{\quatvecmag}[1]{\ensuremath{\lowercase{#1}}}
+\newcommand{\quatunitvec}[1]{\ensuremath{\unitvec{\lowercase{#1}}}}
+\newcommand{\quatlog}[1]{\ensuremath{\bm{\mathfrak{\lowercase{#1}}}}}
+\newcommand{\quatlogmag}[1]{\ensuremath{\mathfrak{\lowercase{#1}}}}
+\DeclareMathOperator{\Angle}{ang}
+\newcommand{\quatangle}[1]{\ensuremath{\Angle{\quat{#1}}}}
+
+\DeclareMathOperator*{\DirectSum}{\oplus}
+\DeclareMathOperator*{\DirectProduct}{\otimes}
+\renewcommand{\G}{\mathcal{G}}
+
+\graphicspath{{Plots/}} %
+
+\title{The Grand Unified Theory {\fontsize{0.15cm}{1em}\selectfont of
+    geometry}}
+\subtitle{\small Geometric Algebra}
+
+\institute[Cornell Astrophysics Lunch]{Cornell Astrophysics Lunch}
+
+\date{October 29, 2014}
+
+\author[Mike Boyle] {Mike Boyle}
+
+\subject{}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+
+  \note{I'll start off by admitting that I was primarily a math major
+    in undergrad at U. Chicago, and I absolutely loved it. Now, if you
+    don't know the math department at Chicago, I'll tell you that that
+    basically means I absolutely love useless mathematical formalism
+    and obscure proofs. And some of what I'll talk about has buzzwords
+    associated with it that might tune people out.  Please don't let
+    it.
+
+    Because I'm a physicist now, and useful math is my bread and
+    butter. And the message I really hope to get across is that GA is
+    \emph{extraordinarily} useful, concrete, and easy. In fact, it is
+    so useful that I can honestly say that I think it's basically all
+    the math a physicist needs to know. I sincerely think that it can
+    be called the grand unified theory of geometry --- or at least the
+    parts of geometry that physicists care about. It ties together
+    every technique I've ever seen in mathematical physics; it does it
+    very simply; and it's easier to solve problems with it.
+    ridiculously simple.
+
+    Three basic points: It is easy to understand. It takes every
+    separate strand of mathematics physicists use, and ties them
+    together into one tidy bundle. And to top it off, it's easier to
+    solve problems with GA than with standard traditional methods.}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\begin{frame}
+  \frametitle{Geometric algebra (GA)}
+  \begin{enumerate}
+   \item GA is easy to understand (and teach)
+   \item It unifies and extends familiar math
+   \item It makes problems easier
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Outline}
+  \begin{itemize}
+   \item Geometric Algebra (GA)
+   \item GA in two dimensions
+   \item GA in more dimensions
+   \item Transformations with GA
+   \item Keplerian orbits
+   \item Complex analysis
+   \item Green's functions
+   \item Dirac equation
+   \item E\&M \pause
+   \item Linear Algebra
+   \item Relativistic kinematics
+   \item Differential forms
+   \item Twistors
+   \item GR
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+% \part{Introduction}
+% \frame{\partpage}
+
+\begin{frame}
+  \frametitle{Free\textsuperscript{1} algebra}
+  \begin{textblock}{4}(0.,7.5) \scriptsize{\textsuperscript{1}unital,
+      associative}
+  \end{textblock}
+
+  Letters: \vspace{-0.1in}
+  \begin{center}
+    Scalars $\alpha, \beta, \gamma, \delta, \ldots \in \mathbb{R}$
+
+    Vectors $\vec{v}, \vec{w}, \vec{m}, \vec{n}, \ldots \in
+    \mathbb{R}^{p,q}$
+  \end{center}
+  \pause \vspace{-0.05in}
+
+  Words: \vspace{-0.2in}
+  \begin{gather*}
+    \vec{v}
+    \\
+    \alpha\, \vec{w}
+    \\
+    \alpha\, \vec{v}\, \vec{w}
+    \\
+    (\alpha\, \vec{v}\, \vec{w})\, (\beta\, \vec{m}\, \vec{n}) =
+    \alpha\, \beta\, \vec{v}\, \vec{w}\, \vec{m}\, \vec{n}
+  \end{gather*}
+  \pause \vspace{-0.2in}
+
+  Sentences: \vspace{-0.15in}
+  \begin{gather*}
+    \vec{v} + \gamma\, \vec{w}\, \vec{m}\, \vec{n} + \alpha\, \beta\,
+    \vec{v}\, \vec{w}\, \vec{m}\, \vec{n}
+    \\
+    \gamma\, \vec{v}(1 + \delta\, \vec{m}\, \vec{n}) = \gamma\,
+    \delta\, \vec{v}\, \vec{m}\, \vec{n} + \gamma\, \vec{v}
+  \end{gather*}
+
+  \note{But now the question is: what do we do with this?}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Free algebra is \emph{too} free!}
+  Allow manipulation
+  \begin{equation*}
+    \vec{v}\, \vec{v} \leftrightarrow \vec{v} \cdot \vec{v}
+  \end{equation*}
+  \pause
+
+  We get inverses!
+  \begin{equation*}
+    1
+    = \frac{\vec{v}\cdot \vec{v}} {\vec{v}\cdot \vec{v}}
+    \pause
+    = \frac{\vec{v}\, \vec{v}} {\vec{v}\cdot \vec{v}}
+    \pause
+    = \vec{v}\, \left(\frac{\vec{v}} {\vec{v}\cdot\vec{v}}\right)
+  \end{equation*}
+  \pause
+  \begin{equation*}
+    \vec{v}^{-1} = \frac{\vec{v}} {\vec{v} \cdot \vec{v}}
+  \end{equation*}
+
+  \note{We want some way to manipulate these expressions further. One
+    thing that would be really nice is if we had inverses. But the only
+    thing around with any inverses is our field, $\mathbb{R}$, so we
+    need to simplify some of our expressions into scalars. In
+    particular, it makes sense to impose $\vec{v}\, \vec{v} = \vec{v}
+    \cdot \vec{v} \in \mathbb{R}$.
+
+    Note that this doesn't imply $\vec{v}\, \vec{w} = \vec{v} \cdot
+    \vec{w}$; our substitution only works for a vector times itself.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{General Clifford algebra}
+
+  \begin{equation*}
+    \Cl(\mathbb{V}, N) = \DirectSum_{g=0}^{\infty} \otimes^{g}\,
+    \mathbb{V}\ /\ \{ \vec{v}\otimes \vec{v} - N(\vec{v}) \}
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Two dimensions \phantom{:$\G(\mathbb{R}^{2})$}}
+  \begin{equation*}
+    \vec{v} = \vec{x} + \vec{y}
+  \end{equation*}
+  \pause
+  \begin{equation*}
+    \vec{v}\, \vec{v} = \vec{v} \cdot \vec{v} = 2
+  \end{equation*}
+  \pause \vspace{-0.125in}
+  \begin{align*}
+    \vec{v}\, \vec{v} &= (\vec{x}+\vec{y})\, (\vec{x}+\vec{y}) \\
+    &= \vec{x}\, \vec{x} + \vec{y}\, \vec{y} + \vec{x}\, \vec{y} +
+    \vec{y}\, \vec{x} \\
+    &= 2 + (\vec{x}\, \vec{y} + \vec{y}\, \vec{x})
+  \end{align*}
+  \vspace{-0.175in}
+
+  \pause
+  \begin{equation*}
+    \vec{x}\, \vec{y} = -\vec{y}\, \vec{x}
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Two dimensions: $\mathbb{C}$
+    \phantom{:$\G(\mathbb{R}^{2})$}}
+  \begin{equation*}
+    \vec{x}\, \vec{y} = -\vec{y}\, \vec{x}
+  \end{equation*}
+
+  \begin{equation*}
+    (\vec{x}\, \vec{y})^{2} = \vec{x}\, \vec{y}\, \vec{x}\, \vec{y} =
+    -\vec{y}\, \vec{x}\, \vec{x}\, \vec{y} = - \vec{y}\, \vec{y} = -1
+  \end{equation*}
+
+  \pause \vspace{0.1in}
+  \begin{center}
+    The quantity $\vec{x}\, \vec{y}$ \emph{is} the unit imaginary $i$
+    (in 2-d)
+
+    The quantity $\vec{y}\, \vec{x}$ \emph{is} the conjugate $\bar{i}$
+    (in 2-d)
+  \end{center}
+
+  \pause
+  \begin{align*}
+    \vec{v}\, \vec{w} &= (v_{x}\vec{x} + v_{y}\vec{y})\, (w_{x}\vec{x}
+    + w_{y}\vec{y}) \\
+    &= (v_{x}\, w_{x} + v_{y}\, w_{y}) + (v_{x}\, w_{y} - v_{y}\,
+    w_{x}) \vec{x}\, \vec{y} \\
+    \only<4->{&= \vec{v} \cdot \vec{w} + \vec{v} \wedge \vec{w}}
+  \end{align*}
+
+  \note{Product of two vectors is a spinor. You get one term that's the
+    dot product between the vectors, and one that's the area of the
+    parallelogram.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Two dimensions: $\G(\mathbb{R}^{2})$}
+  \begin{equation*}
+    1
+    \qquad
+    \begin{matrix}
+      \vec{x} \\ \vec{y}
+    \end{matrix}
+    \qquad
+    \vec{x}\, \vec{y}
+  \end{equation*}
+
+  \note{Vectors get re-mapped into spinors. Accident of dimension.
+    Easy to generalize dimensions}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Three dimensions: $\G(\mathbb{R}^{3})$}
+  \begin{equation*}
+    1
+    \qquad
+    \begin{matrix}
+      \vec{x} \\ \vec{y} \\ \vec{z}
+    \end{matrix}
+    \qquad
+    \begin{matrix}
+      \vec{x}\,\vec{y} \\ \vec{y}\, \vec{z} \\ \vec{z}\, \vec{x}
+    \end{matrix}
+    \qquad
+    \vec{x}\, \vec{y}\, \vec{z}
+  \end{equation*}
+  \pause
+
+  \begin{equation*}
+    1
+    \qquad
+    \begin{matrix}
+      \sigma_{x} \\ \sigma_{y} \\ \sigma_{z}
+    \end{matrix}
+    \qquad
+    \begin{matrix}
+      \sigma_{x}\,\sigma_{y} \\ \sigma_{y}\, \sigma_{z} \\
+      \sigma_{z}\, \sigma_{x}
+    \end{matrix}
+    \qquad
+    \sigma_{x}\, \sigma_{y}\, \sigma_{z}
+  \end{equation*}
+  \note{Quaternions are remapped spinors. Pauli matrices are folded
+    copies of the whole algebra.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Spacetime: $\G(\mathbb{R}^{3,1})$}
+  \begin{equation*}
+    1
+    \qquad
+    \begin{matrix}
+      \vec{x} \\ \vec{y} \\ \vec{z} \\ \vec{t}
+    \end{matrix}
+    \qquad
+    \begin{matrix}
+      \vec{x}\,\vec{y} \\
+      \vec{y}\, \vec{z} \\
+      \vec{z}\, \vec{x} \\
+      \vec{x}\,\vec{t} \\
+      \vec{y}\,\vec{t} \\
+      \vec{z}\,\vec{t}
+    \end{matrix}
+    \qquad
+    \begin{matrix}
+      \vec{x}\, \vec{y}\, \vec{z} \\
+      \vec{y}\, \vec{z}\, \vec{t} \\
+      \vec{z}\, \vec{t}\, \vec{x} \\
+      \vec{t}\, \vec{x}\, \vec{y}
+    \end{matrix}
+    \qquad
+    \vec{x}\, \vec{y}\, \vec{z}\, \vec{t}
+  \end{equation*}
+  \pause
+
+  \begin{equation*}
+    1
+    \qquad
+    \begin{matrix}
+      \gamma_{x} \\ \gamma_{y} \\ \gamma_{z} \\ \gamma_{t}
+    \end{matrix}
+    \qquad
+    \begin{matrix}
+      \gamma_{x}\,\gamma_{y} \\
+      \gamma_{y}\, \gamma_{z} \\
+      \gamma_{z}\, \gamma_{x} \\
+      \gamma_{x}\,\gamma_{t} \\
+      \gamma_{y}\,\gamma_{t} \\
+      \gamma_{z}\,\gamma_{t}
+    \end{matrix}
+    \qquad
+    \begin{matrix}
+      \gamma_{x}\, \gamma_{y}\, \gamma_{z} \\
+      \gamma_{y}\, \gamma_{z}\, \gamma_{t} \\
+      \gamma_{z}\, \gamma_{t}\, \gamma_{x} \\
+      \gamma_{t}\, \gamma_{x}\, \gamma_{y}
+    \end{matrix}
+    \qquad
+    \gamma_{x}\, \gamma_{y}\, \gamma_{z}\, \gamma_{t}
+  \end{equation*}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\begin{frame}
+  \frametitle{Reflection}
+  \begin{align*}
+    \vec{n}\, \vec{v}\, \vec{n}^{-1} %
+    &= \vec{n}\, (\vec{v}_{\parallel} + \vec{v}_{\perp})\,
+    \vec{n}^{-1} \\ %
+    &= (\vec{v}_{\parallel} - \vec{v}_{\perp})\, \vec{n}\,
+    \vec{n}^{-1} \\ %
+    &= \vec{v}_{\parallel} - \vec{v}_{\perp}
+  \end{align*}
+
+  \note{Arbitrary dimension and signature!}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Orthogonal transformations}
+  \emph{Any} orthogonal transformation in $p+q$ dimensions can be
+  written as the composition of at most $p+q$ reflections \pause
+  \vspace{0.2in}
+
+  Any \emph{special} orthogonal transf. in $p+q$ dimensions can be
+  written as the composition of at most $\lfloor \frac{p+q}{2}
+  \rfloor$ \emph{pairs of} reflections \pause \vspace{0.2in}
+
+  Product of vectors gives ``Pin'' group, pinors\\
+  $\text{Pin}(p,q) \rightarrow \text{O}(p,q)$\vspace{0.2in}
+
+  Product of \emph{pairs of} vectors gives ``Spin'' group, spinors\\
+  $\text{Spin}(p,q) \rightarrow \text{SO}(p,q)$
+\end{frame}
+
+\begin{frame}
+  \frametitle{General linear transformations}
+  $m \in GL(p,q)$:
+  \begin{equation*}
+    \vec{v} \mapsto M\, \vec{v}\, M^{-1}
+  \end{equation*}
+
+  \pause \vspace{0.2in}
+
+  \emph{All} finite-dimensional Lie algebras:
+  \begin{equation*}
+    \left[\vec{a}\, \vec{b}, \vec{c}\, \vec{d} \right]
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rotations \only<3->{(and boosts)}}
+  \begin{gather*}
+    \vec{v}\ \mapsto\ \vec{m}\, (\vec{n}\, \vec{v}\, \vec{n}^{-1})\,
+    \vec{m}^{-1}\ =\ (\vec{m}\, \vec{n})\, \vec{v}\, (\vec{m}\,
+    \vec{n})^{-1}
+    \\[5pt]
+    \vec{m}\, \vec{n} = \cos\theta + \frac{\vec{m} \wedge
+      \vec{n}}{\lvert \vec{m} \wedge \vec{n} \rvert}\, \sin\theta
+  \end{gather*}
+  \pause \vspace{-0.1in}
+
+  \begin{gather*}
+    e^{\theta\, \vec{a}\, \vec{b}} = \cos\theta + \vec{a}\, \vec{b}\,
+    \sin\theta
+    \\[5pt]
+    \vec{v} \mapsto e^{\theta\, \vec{a}\, \vec{b}/2}\, \vec{v}\,
+    e^{-\theta\, \vec{a}\, \vec{b}/2}
+  \end{gather*}
+  \pause \vspace{-0.1in}
+
+  % \begin{align*}
+  %   e^{\theta\, \vec{a}\, \vec{b}/2}\, \vec{v}\, e^{-\theta\,
+  %   \vec{a}\, \vec{b}/2} %
+  %   &= e^{\theta\, \vec{a}\, \vec{b}/2}\, (\vec{v}_{\parallel} +
+  %   \vec{v}_{\perp})\, e^{-\theta\, \vec{a}\, \vec{b}/2} \\ %
+  %   &= e^{\theta\, \vec{a}\, \vec{b}}\, \vec{v}_{\parallel} +
+  %   \vec{v}_{\perp} \\ %
+  % \end{align*}
+  % \pause
+
+  \begin{gather*}
+    e^{\alpha\, \vec{a}\, \vec{t}} = \cosh\alpha + \vec{a}\, \vec{t}\,
+    \sinh\alpha
+    \\[5pt]
+    \vec{v} \mapsto e^{\alpha\, \vec{a}\, \vec{t}/2}\, \vec{v}\,
+    e^{-\alpha\, \vec{a}\, \vec{t}/2}
+  \end{gather*}
+
+  \note{I got into GA originally because this other group had written
+    this paper about finding the symmetry axis of a gravitational
+    waveform. But they came up with this rotation that just took the
+    $z$ axis directly onto the symmetry axis, and ignored everything
+    else. The problem with this is that ``everything else'' is the
+    phase of the gravitational wave, which you may know is a very
+    important quantity. In their system, the phase was terrible: it had
+    discontinuities; it could reverse direction; it was just awful. The
+    problem was that they were only keeping track of that one vector;
+    they had their eyes on one thing that was being transformed, and
+    that's not enough to tell you what's going on around that
+    vector. So Rob Owen, Harald Pfeiffer, and I pointed out that you
+    need to keep track of the thing that's doing the transformation.}
+
+  \note{We deal with equations describing the change in things that get
+    transformed. So the question is: do we deal with the thing itself
+    that gets transformed, or the thing doing the transforming?  And I
+    think a pretty good rule of thumb for answering this question is:
+    If there's only one thing that can get transformed, then by all
+    means just look at that; if there are more, then you would probably
+    benefit from looking at the thing doing the transforming.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Keplerian orbits}
+  \begin{equation*}
+    \vec{r} = \quat{U}\, \hat{\vec{r}}_0\, \bar{\quat{U}} =
+    \quat{U}^{2}\, \hat{\vec{r}}_0
+  \end{equation*}
+  \pause
+  \begin{equation*}
+    \dot{\vec{r}} = 2\, \dot{\quat{U}}\, \quat{U}\, \hat{\vec{r}}_0
+    \quad \text{and} \quad r = \quat{U}\, \bar{\quat{U}}
+  \end{equation*}
+  \pause
+  \begin{equation*}
+    r\, \dot{\quat{U}} = \frac{1}{2} \dot{\vec{r}}\, \quat{U}\,
+    \hat{\vec{r}}_0 \pause \qquad \rightarrow \qquad \frac{d}{ds}
+    \quat{U} = \frac{1}{2} \dot{\vec{r}}\, \quat{U}\, \hat{\vec{r}}_0
+  \end{equation*}
+  \pause
+  \begin{align*}
+    \frac{d^{2}}{ds^{2}} \quat{U} %
+    &= \frac{1}{2} \left( r\, \ddot{\vec{r}} \right)\, \quat{U}\,
+    \hat{\vec{r}}_0 + \frac{1}{2} \dot{\vec{r}}\, \left( \frac{1}{2}
+      \dot{\vec{r}}\, \quat{U}\, \hat{\vec{r}}_0 \right)\,
+    \hat{\vec{r}}_0 \\ %
+    &= \frac{1}{2} \left( \ddot{\vec{r}}\, \vec{r} + \frac{1}{2}
+      \dot{\vec{r}}^{2} \right) \quat{U} \\ %
+    &= \frac{E}{2\mu} \quat{U}
+  \end{align*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Keplerian orbits}
+  \begin{equation*}
+    \frac{d^{2}}{ds^{2}} \quat{U} = \frac{E}{2\mu} \quat{U}
+  \end{equation*}
+
+  \pause
+  \begin{equation*}
+    \quat{U} = A\, e^{i\, \omega\, s} + B\, e^{-i\, \omega\, s}
+    \qquad
+    (i\, \omega)^{2} = \frac{E}{2\mu}
+  \end{equation*}
+  \pause
+  \begin{equation*}
+    t = \int \quat{U}\, \co{\quat{U}}\, ds = (A^{2}+B^{2})\, s +
+    \frac{A\,B}{\omega}\, \sin (2\,\omega\,s)
+  \end{equation*}
+
+  \pause
+  \begin{itemize}
+   \item Spinor equations are easier \emph{and} better
+   \item ``Complex numbers'' contain hidden geometry
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Vector derivative $\nabla$}
+  Tensor analysis:
+  \begin{equation*}
+    \nabla^{a}\, \psi^{b\ldots}
+  \end{equation*}
+
+  Differential geometry:
+  \begin{equation*}
+    d\, \psi
+  \end{equation*}
+  \pause
+
+  Geometric calculus:
+  \begin{equation*}
+    \nabla\, \vec{\psi}
+    \pause
+    = \nabla \cdot \vec{\psi} + \nabla \wedge \vec{\psi}
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Complex analysis}
+  \begin{gather*}
+    \vec{\nabla}\, \psi = 0 \\ %
+    \left( \vec{x} \frac{\partial}{\partial x} + \vec{y}\,
+      \frac{\partial}{\partial y} \right) \left( u + v\, \vec{x}\,
+      \vec{y} \right) = 0
+  \end{gather*}
+  \pause
+  \begin{gather*}
+    \frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}\\
+    \frac{\partial u}{\partial y} = -\frac{\partial v}{\partial x}
+  \end{gather*}
+  \pause
+
+  Cauchy's integral formula:
+  \begin{equation*}
+    \psi(\vec{a}) = \frac{1}{2\pi i} \oint \frac{\psi(\vec{z})}
+    {\vec{z}-\vec{a}}\, ds %
+    \pause %
+    - \frac{1}{\pi}\int\frac{\vec{\nabla}\psi}{\vec{z}-\vec{a}} i\, dA
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Green's functions (Euclidean case)}
+  \begin{gather*}
+    G(\vec{x};\vec{y}) = \frac{1}{S_{n}}\, \frac{\vec{x}-\vec{y}} {
+      \lvert \vec{x}-\vec{y} \rvert^{n}}
+    \\
+    \vec{\nabla} G(\vec{x};\vec{y}) = \delta(\vec{x} - \vec{y})
+  \end{gather*}
+
+  Cauchy formula in $n$ dimensions:
+  \begin{equation*}
+    \psi(\vec{y}) = \frac{1} {i\, S_{n}} \oint_{\partial \Omega}
+    \frac{\vec{x}-\vec{y}} {\lvert \vec{x}-\vec{y} \rvert^{n}} ds\,
+    \psi(\vec{x})
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Stokes' Theorem}
+  \begin{itemize}
+   \item Fundamental Theorem of Integral Calculus
+   \item Kelvin-Stokes Theorem
+   \item Green's Theorem
+   \item Divergence Theorem
+   \item Differential forms:
+    \begin{equation*}
+      \int_{\partial \Omega} \omega = \int_{\Omega} d\omega
+    \end{equation*}
+   \item Green's functions
+  \end{itemize}
+  \pause
+
+  Fundamental theorem of geometric calculus:
+  \begin{equation*}
+    \int_{\partial \Omega} L(dS) = \int_{\Omega} \mathring{L} (
+    \mathring{\nabla} dX)
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dirac equation}
+  Dirac notation:
+  \begin{equation*}
+    \hat{\gamma}^{\mu} \partial_{\mu}\, \ket{\psi}
+    = (m\, + i\, e\, \hat{\gamma}^{\mu}\, A_{\mu}) \ket{\psi}
+  \end{equation*}
+  \pause
+
+  Geometric calculus:
+  \begin{equation*}
+    \vec{\nabla} \psi = \left( m\, \psi\, \vec{t} + e\, A\, \psi
+    \right)\, \vec{x}\, \vec{y}
+  \end{equation*}
+  \pause
+
+  Observables:
+  \begin{table}
+    \begin{tabular}{c c}
+      Dirac notation & Geometric calculus \\
+      \hline \\[-12pt]
+      $\braket{\tilde{\psi} | \psi }
+      - I\, \braket{\tilde{\psi} | i \hat{\gamma}_{5} | \psi }$
+      & $\psi\, \bar{\psi}$ \\
+      $\braket{\tilde{\psi} | \hat{\gamma}_{\mu} | \psi }$
+      & $\psi\, \vec{t}\, \bar{\psi}$ \\
+      $\braket{\tilde{\psi} | i\, \hat{\gamma}_{\mu\nu} | \psi }$
+      & $\psi\, \vec{x}\, \vec{y}\, \bar{\psi}$ \\
+      $\braket{\tilde{\psi} | \hat{\gamma}_{\mu}\, \hat{\gamma}_{5}
+        | \psi }$
+      & $\psi\, \vec{z}\, \bar{\psi}$
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}
+  \frametitle{E\&M}
+  Differential forms:
+  \begin{equation*}
+    dF = 0 \qquad d\ast F = J
+  \end{equation*}
+  \pause
+
+  Geometric calculus:
+  \begin{equation*}
+    \vec{\nabla} F = J
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Riemann tensor for Kerr}
+  \begin{equation*}
+    \mathcal{R}(B) = - \frac{M} {(r-i\, \vec{a} \cdot
+      \hat{\vec{r}})^{3}}\, \frac{B - 3\, \vec{r}\, \vec{t}\, B\,
+      \vec{t}\, \vec{r}} {2}
+  \end{equation*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Uses of Geometric Algebra}
+  \begingroup
+  \fontsize{0.6em}{0.75em}\selectfont
+  \begin{columns}
+    \begin{column}{0.5\linewidth}
+      \begin{itemize}
+       \item Complex algebra, complex analysis
+       \item Quaternions, Pauli spinors, rotations
+       \item Pauli equation
+       \item Biquaternions, Dirac spinors, Lorentz group
+       \item Relativistic mechanics
+       \item Dirac equation
+       \item Twistors
+       \item Two-spinor calculus
+       \item Multiparticle quantum mechanics
+       \item Scattering (particles and E\&M waves)
+       \item Linear algebra
+       \item Tensor algebra
+       \item Lie theory
+       \item Differential forms
+       \item GR
+       \item Algebraic geometry
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\linewidth}
+      \begin{itemize}
+       \item Lagrangian and Hamiltonian techniques
+       \item Lagrangian field theory
+       \item Gauge theory
+       \item Projective geometry
+       \item Conformal geometry
+       \item Conic geometry
+       \item Grassmann numbers
+       \item Berezin calculus
+       \item Green's functions
+       \item Stokes' Theorem
+       \item Atiyah-Singer index theorem
+       \item Combinatorics
+       \item Automated theorem proving
+       \item Signal processing
+       \item Computer vision
+       \item Online dating
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \endgroup
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\part{Summary}
+
+\section{}
+
+\begin{frame}
+  \frametitle{Summary}
+  \begin{itemize}
+   \item GA is easy to understand (and teach)
+   \item It unifies and extends familiar math
+   \item It makes problems easier
+  \end{itemize}
+
+  \vspace{0.4in}
+
+  Why GA is powerful
+  \begin{itemize}
+   \item Uniform, systematic
+   \item Invertible product
+   \item Easy access to spinors
+   \item Spinor equations are at the heart of physics
+   \item Tight integration between algebraic symbology and geometric
+    meaning
+  \end{itemize}
+  This is just the tip of the iceberg...
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Empty frame, so I don't accidentally overrun
+\part{} \begin{frame} \end{frame}
+
+\part{Extras}
+
+\begin{frame}
+  \frametitle{History}
+  \begingroup
+  \fontsize{0.8em}{1.em}\selectfont
+  \begin{itemize}
+   \item 1637 Descartes coins ``imaginary'' numbers
+   \item 1751 Euler angles
+   \item 1843 Hamilton carves quaternion formula into Brougham Bridge
+   \item 1844 Grassmann published first edition
+   \item 1862 Grassmann publishes heavily rewritten 2nd edition
+   \item 1873 Clifford: ``Applications of Grassmann's
+    Extensive Algebra''
+   \item 1881 Gibbs: ``Elements of vector analysis''
+   \item 1987 Hestenes and Sobczyk: ``Clifford algebra to geometric
+    calculus''
+   \item 2003 Doran and Lasenby: ``Geometric Algebra for Physicists''
+  \end{itemize}
+  \endgroup
+\end{frame}
+
+% \section{Some previous section name}
+
+% \begin{frame}[label=SomeOtherUsefulLabelName]
+%   \frametitle{Original slide's name}
+%   \begin{center}
+%     \hyperlink{SomeUsefulLabelName}%
+%     {Ooh!  Extra stuff links back to original}
+%   \end{center}
+% \end{frame}
+
+\section{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\end{document}
+
+%%% Local Variables:
+%%% TeX-master: true
+%%% End:

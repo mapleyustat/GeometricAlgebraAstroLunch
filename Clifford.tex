@@ -1,0 +1,15 @@
+\usepackage[T1]{fontenc}
+\pdfmapfile{+Clifford.map}
+\DeclareFontFamily{U}{Clifford}{\hyphenchar\font=-1}
+\DeclareFontShape{U}{Clifford}{m}{n}{<->Clifford}{}
+\makeatletter
+\def\@Cl#1{%
+  \mbox{{\fontsize{#1}{#1}\fontfamily{Clifford}%
+    \fontencoding{U}\fontseries{m}\fontshape{n}\selectfont%
+    \char "43}}}
+\def\Cl{\mathchoice
+  {\@Cl{\tf@size}}
+  {\@Cl{\tf@size}}
+  {\@Cl{\sf@size}}
+  {\@Cl{\ssf@size}}}
+\makeatother

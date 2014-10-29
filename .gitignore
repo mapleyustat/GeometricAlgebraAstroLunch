@@ -1,0 +1,12 @@
+Externals
+Plots
+auto
+*.aux
+*.auxlock
+*.log
+*.nav
+*.out
+*.snm
+*.pdf
+*.synctex.gz
+*.toc
